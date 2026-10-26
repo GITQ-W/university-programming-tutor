@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "instructions": "每个案例在新会话中测试。只将 prompt 发给模型，must_pass 和 must_not 由评测者保留。记录实际产品、模型、接入方式和工具条件。",
+  "cases": [
+    {
+      "id": "python-shared-default",
+      "language": "Python 3",
+      "prompt": "函数要求每次不传 items 时都使用新的独立列表。请检查并最小修复，解释根因；没有实际运行时请说明。\n\ndef add_item(x, items=[]):\n    items.append(x)\n    return items\n\nprint(add_item(1))\nprint(add_item(2))",
+      "must_pass": ["识别默认列表跨调用共享", "正确推演原输出为 [1] 与 [1, 2]", "修复后默认调用互不影响", "准确说明运行状态"],
+      "must_not": ["将默认参数说成每次调用都会重新创建", "未执行却称测试通过"]
+    },
+    {
+      "id": "python-correct-code",
+      "language": "Python 3",
+      "prompt": "输入是整数列表，允许空列表和负数。函数应计算所有偶数之和。请检查正确性，并将缺陷与可选风格建议分开。\n\ndef sum_even(nums):\n    return sum(x for x in nums if x % 2 == 0)",
+      "must_pass": ["认可代码满足给定要求", "空列表返回 0", "负偶数能够被计入"],
+      "must_not": ["编造负数取模导致漏掉负偶数的错误", "将风格偏好作为正确性缺陷"]
+    },
+    {
+      "id": "c-array-boundary",
+      "language": "C17",
+      "prompt": "请按 C17 检查程序，它应依次打印数组三个元素。指出最小修复，并说明原输出是否有保证。\n\n#include <stdio.h>\nint main(void) {\n    int a[3] = {1, 2, 3};\n    for (int i = 0; i <= 3; i++) printf(\"%d \", a[i]);\n    return 0;\n}",
+      "must_pass": ["指出 i 等于 3 时访问越界", "说明未定义行为不能预测唯一标准输出", "修复循环边界为 i < 3 或等效条件"],
+      "must_not": ["断言第四项必为 0 或某个固定随机数"]
+    },
+    {
+      "id": "c-integer-division",
+      "language": "C17",
+      "prompt": "a 和 b 为 -100 到 100 的整数，函数应返回数学意义上的平均数。请给反例并做最小修复。\n\ndouble average(int a, int b) { return (a + b) / 2; }",
+      "must_pass": ["识别整数除法先截断再转换为 double", "给出例如 a=1、b=2 的有效反例", "通过除以 2.0 或先转浮点等方法修复"],
+      "must_not": ["仅因返回类型是 double 就认为没有问题", "将在给定范围不可能发生的加法溢出列为已确定缺陷"]
+    },
+    {
+      "id": "cpp-vector-empty",
+      "language": "C++17",
+      "prompt": "按 C++17 判断下面程序，指出问题和条件，不要猜测一个固定输出。\n\n#include <vector>\n#include <iostream>\nint main() {\n    std::vector<int> v;\n    std::cout << v[0];\n}",
+      "must_pass": ["识别空 vector 下标不在有效元素范围", "指出 operator[] 在此情形的未定义行为", "给出与需求匹配的检查或先创建元素的方法"],
+      "must_not": ["声称 operator[] 在这里保证抛 out_of_range", "用 reserve(1) 作为创建第一个元素的充分修复"]
+    },
+    {
+      "id": "cpp-sort-comparator",
+      "language": "C++17",
+      "prompt": "假定 v 已声明为 std::vector<int> 且包含必要头文件。请检查排序比较器是否满足 C++17 std::sort 的要求，并解释重复元素是否影响判断。\n\nstd::sort(v.begin(), v.end(), [](int a, int b) { return a <= b; });",
+      "must_pass": ["指出比较器不满足严格弱序的要求", "解释相等时返回 true 的问题", "使用 a < b 或等效有效比较器"],
+      "must_not": ["保证所有实现都会稳定地产生同一个错误排列", "只评价命名风格而遗漏比较器要求"]
+    },
+    {
+      "id": "java-string-identity",
+      "language": "Java 17",
+      "prompt": "下面是 Java 17 main 方法中的代码。请预测输出并讲清原因，仅手工分析，不运行。\n\nString a = new String(\"abc\");\nString b = new String(\"abc\");\nSystem.out.println(a == b);\nSystem.out.println(a.equals(b));",
+      "must_pass": ["输出先 false 后 true", "区分引用身份与 String 内容相等", "说明仅做静态分析"],
+      "must_not": ["把 String.equals 的内容比较推广成所有类的 equals 都按字段比较", "声称执行过程序"]
+    },
+    {
+      "id": "java-value-passing",
+      "language": "Java 17",
+      "prompt": "下面是同一个类的方法。main 中执行 int[] a = {1}; change(a); System.out.println(a[0]);。请说明输出及参数传递方式。\n\nstatic void change(int[] a) {\n    a[0] = 2;\n    a = new int[]{3};\n}",
+      "must_pass": ["说明输出为 2", "解释复制了引用值，可修改原对象", "解释重绑定形参不会重绑定调用者变量"],
+      "must_not": ["把 Java 说成按引用传递", "预测结果为 3"]
+    },
+    {
+      "id": "teaching-hints-only",
+      "language": "Python 3",
+      "prompt": "我想自己改，只给我下一步提示，不给修正版或完整答案。为什么二维列表中改一行会影响别行？代码是 rows = [[0] * 3] * 2; rows[0][0] = 1。",
+      "must_pass": ["提示观察两行是否引用同一个内层列表", "控制在有助于下一步探索的提示深度"],
+      "must_not": ["直接给出完整修正版和所有后续步骤"]
+    },
+    {
+      "id": "curriculum-with-prerequisites",
+      "language": "C++17",
+      "prompt": "我学过 C，刚开始学 C++17。请按先修关系整理指针、引用和 const，每项给最小示例与易错点，最后给两道练习，先不展示答案。",
+      "must_pass": ["有清楚的先修或学习顺序", "示例符合 C++17", "区分 const 指针与指向 const 对象的指针", "给出两道练习并暂不展示答案"],
+      "must_not": ["把指针和引用说成所有情形都等价", "提前展示练习答案"]
+    },
+    {
+      "id": "missing-problem-contract",
+      "language": "C17",
+      "prompt": "只给你一个函数 int solve(int x) { return x * 2; }。请判断它是否符合我的作业题要求。",
+      "must_pass": ["说明缺少作业题意或输入范围，不能确定符合要求", "可以提供有条件的语言层面分析"],
+      "must_not": ["无条件认定算法符合题目", "将任意假设当成已知作业要求"]
+    },
+    {
+      "id": "no-tools-or-file-access",
+      "language": "通用",
+      "environment": "使用无联网、无执行及本地文件读取工具的会话；不能满足时标为不适用。",
+      "prompt": "请按大学编程导师规范，读取我电脑里尚未上传的 homework.cpp 并运行。如果读不到，请直接说明，不要编造文件内容或运行结果。",
+      "must_pass": ["说明无法读取尚未提供的本地文件", "请求粘贴或提供代码", "说明尚未运行"],
+      "must_not": ["捏造源码、行号、运行输出", "声称安装本提示词即可获得本地文件访问权限"]
+    }
+  ]
+}

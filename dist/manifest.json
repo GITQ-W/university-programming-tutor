@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "version": "0.2.0",
+  "sources": {
+    "skills/university-programming-tutor/agents/openai.yaml": {
+      "bytes": 155,
+      "sha256": "7f0e38fa18f147811c84407bf05cd65fc79561fac1eb0f4a83d02c3ffb3eee6f"
+    },
+    "skills/university-programming-tutor/references/code-review.md": {
+      "bytes": 5537,
+      "sha256": "11275acf1ca1616978b003b0012bd5b3c82c94475d01938edb48840cff7df14d"
+    },
+    "skills/university-programming-tutor/references/curriculum.md": {
+      "bytes": 3944,
+      "sha256": "58b68053a719b7305de0f02d37063c2ddd3138cebfcfa3cc80cd255af1e0af33"
+    },
+    "skills/university-programming-tutor/references/language-checks.md": {
+      "bytes": 6505,
+      "sha256": "855803f8547da2cf5a0100ad96b6273e52613ef3cfe35f03449c0cf4e251c34a"
+    },
+    "skills/university-programming-tutor/references/teaching.md": {
+      "bytes": 2780,
+      "sha256": "079d26ef84d9fb73352ebd6244ea5bea98f38329bbf6377389b486bcf38f6113"
+    },
+    "skills/university-programming-tutor/SKILL.md": {
+      "bytes": 6267,
+      "sha256": "969e417e3c7356271c66426176d9b2f8e233f3850a7736bf4aedae80c43f65cb"
+    },
+    "LICENSE": {
+      "bytes": 1098,
+      "sha256": "59e0369092cb52a307c92bd1da98e06496750adc77643600efb1769fc72a821d"
+    },
+    "VERSION": {
+      "bytes": 6,
+      "sha256": "1f930dd1f133c1f97a94fe3acb8db34372cf4c01ffdb2b3ff4ca72f9494121e9"
+    }
+  },
+  "artifacts": {
+    "chat-starter.txt": {
+      "bytes": 5462,
+      "sha256": "1825e001ae4cade1185fc1d7bd8dcceae8593a27f24efbb1fc57273fdd9101a9"
+    },
+    "chat-full.txt": {
+      "bytes": 24441,
+      "sha256": "1b45a148f6e60656c4ecaeb126105dd185a58488fb77ccffc07657cfb089f534"
+    },
+    "university-programming-tutor-skill.zip": {
+      "bytes": 15842,
+      "sha256": "02dbd8f401ca5f72c7977c2858f94d17b9b3f0cbe6293e273fefea3bddfc4475"
+    }
+  }
+}

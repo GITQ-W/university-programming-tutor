@@ -1,0 +1,19 @@
+# Local credentials and environments
+.env
+.env.*
+!.env.example
+.venv/
+venv/
+
+# Generated files
+__pycache__/
+*.py[cod]
+*.log
+*.zip
+!dist/university-programming-tutor-skill.zip
+.pytest_cache/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+Desktop.ini
